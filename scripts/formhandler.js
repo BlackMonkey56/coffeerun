@@ -33,9 +33,42 @@
       this.elements[0].focus();
     });
 
+    FormHandler.prototype.addInputHandler = function(
+      emailCheck,
+      caffeineCheck
+    ) {
+      console.log("Setting input handler for form");
+      this.$formElement.on("input", '[name="emailAddress"]', function(event) {
+        var emailAddress = event.target.value;
+        var message = "";
+        if (emailCheck(emailAddress)) {
+          event.target.setCustomValidity("");
+        } else {
+          message = emailAddress + " is not an authorized email address!";
+          event.target.setCustomValidity(message);
+        }
+      });
+
+      this.$formElement.on("input", '[coffee-style="decaf"]', function(event) {
+        var coffee = $('[name="coffee"]').val();
+        var caffeine = $('[name="strength"]').val();
+
+        console.log(event.target);
+        console.log(coffee + " " + caffeine);
+
+        var message = "";
+        if (caffeineCheck(coffee, caffeine)) {
+          event.target.setCustomValidity("");
+        } else {
+          message = "It's not decaffeine!";
+          event.target.setCustomValidity(message);
+        }
+      });
+    };
+
     FormHandler.prototype.changeRangeHandler = function() {
       console.log("Setting range handler");
-      $("#strengthLevel").on("change", function(event) {
+      $("#strengthLevel").on("input", function(event) {
         $("#strengthValue").val($(this).val());
 
         if ($("#strengthValue").val() < 30) {
